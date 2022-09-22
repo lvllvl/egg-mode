@@ -94,6 +94,7 @@ pub mod account {
     pub const UPDATE_PROFILE_BNNER: &str =
         "https://api.twitter.com/1.1/account/update_profile_banner.json";
     pub const UPDATE_PROFILE: &str = "https://api.twitter.com/1.1/account/update_profile.json";
+    pub const GET_SETTINGS: &str = "https://api.twitter.com/1.1/account/settings.json"; 
 }
 
 pub mod place {

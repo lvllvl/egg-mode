@@ -6,7 +6,7 @@
 
 use crate::{
     auth,
-    common::{post, request_with_empty_response, request_with_json_response, ParamList},
+    common::{post, get, request_with_empty_response, request_with_json_response, ParamList},
     error, links,
     user::TwitterUser,
     Response,
@@ -44,6 +44,32 @@ pub struct UserProfile {
     /// This must be a valid hexadecimal value, and may be either three or six characters (ex: F00 or FF0000).
     /// This parameter replaces the deprecated (and separate) update_profile_colors API method.
     pub profile_link_color: Option<String>,
+}
+
+/// Options for updating settings 
+#[derive(Debug, Default)]
+pub struct Settings {
+    /// Wheter a user can be found via email. 
+    pub discoverable_by_email: Option<bool>,
+    /// Whether to enable the possibility of geotagging tweets from the authenticating user's account.
+    pub geo_enabled: Option<bool>,
+    /// Language of user's timeline.
+    pub language: Option<String>,
+    /// Whether a profile is protected or not.
+    pub protected: Option<bool>,
+    /// Screen name of the user.
+    pub screen_name: Option<String>,
+    /// Show all inline media 
+    pub show_all_inline_media: Option<bool>,
+    // TOOD: Sleep time: enabled (bool), end_time (null), starttime (null)
+    /// Whether to enable the display of contributors alongside the Tweets on the authenticating user's profile.
+    pub contributors_enabled: Option<bool>,
+    /// Whether to enable the display of a user's profile on search results.
+    pub include_entities: Option<bool>,
+    /// Whether to enable the display of a user's profile on search results.
+    pub skip_status: Option<bool>,
+    /// Whether to enable the display of a user's profile on search results.
+    pub use_cookie_personalization: Option<bool>,
 }
 
 /// Updates the authenticating user's profile image.
@@ -106,3 +132,16 @@ pub async fn update_profile(
 
     request_with_json_response(req).await
 }
+
+
+/// Gets settings (including current trend, geo and sleep time information) for the authenticating user.
+/// Returns a Settings object.
+pub async fn get_settings(
+    user_profile: UserProfile,
+    token: &auth::Token
+) -> error::Result<Response<Settings>> { // TODO: Verify that this is the correct return type!  
+
+    let req = get(links::account::GET_SETTINGS, token, None);
+
+    request_with_json_response(req).await
+} 
