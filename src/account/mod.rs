@@ -12,6 +12,8 @@ use crate::{
     Response,
 };
 
+use hyper::{Body, Method, Request};
+
 /// Options for updating the profile banner
 #[derive(Debug, Default)]
 pub struct ProfileBannerOption {
@@ -137,11 +139,10 @@ pub async fn update_profile(
 /// Gets settings (including current trend, geo and sleep time information) for the authenticating user.
 /// Returns a Settings object.
 pub async fn get_settings(
-    user_profile: UserProfile,
+    // user_profile: UserProfile,
     token: &auth::Token
-) -> error::Result<Response<Settings>> { // TODO: Verify that this is the correct return type!  
+) -> error::Result<Request<Body>> { 
 
     let req = get(links::account::GET_SETTINGS, token, None);
-
-    request_with_json_response(req).await
+    Ok(req) 
 } 
